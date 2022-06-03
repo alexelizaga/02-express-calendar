@@ -4,9 +4,10 @@
 
 const { Router } = require('express');
 const { check } = require('express-validator');
-const router = Router();
-
+const { fieldValidator } = require('../middlewares/field-validator');
 const { createUser, loginUser, renewToken } = require('../controllers/auth');
+
+const router = Router();
 
 router.post(
     '/new',
@@ -14,6 +15,7 @@ router.post(
         check('name', 'Name is required').not().isEmpty(),
         check('email', 'Email is required').isEmail(),
         check('password', 'Password minimum length 6').isLength({ min: 6 }),
+        fieldValidator
     ],
     createUser
 );
@@ -23,6 +25,7 @@ router.post(
     [
         check('email', 'Email is required').isEmail(),
         check('password', 'Password minimum length 6').isLength({ min: 6 }),
+        fieldValidator
     ],
     loginUser
 );
