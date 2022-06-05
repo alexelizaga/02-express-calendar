@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
 
-const DB_CNN = process.env.DB_CNN || 'mongodb+srv://calendar_user:KCh1XmBpvGYaW6mL@cluster0.gfks0su.mongodb.net/calendar';
-
 const dbConnection = async () => {
 
     try {
 
-        await mongoose.connect( DB_CNN );
+        await mongoose.connect( process.env.DB_CNN );
 
         console.log('DB is connected');
 

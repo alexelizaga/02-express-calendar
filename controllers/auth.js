@@ -25,6 +25,8 @@ const createUser = async (req, res = response ) => {
 
         await user.save();
 
+        // JWT
+
         res.status(201).json({
             ok: true,
             uid: user.id,
@@ -63,6 +65,9 @@ const loginUser = async (req, res = response) => {
                 msg: 'Wrong username or password.'
             });
         };
+
+        // JWT
+
 
         res.json({
             ok: true,
