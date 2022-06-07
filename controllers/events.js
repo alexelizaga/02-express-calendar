@@ -24,7 +24,7 @@ const createEvent = async (req, res = response) => {
 
         res.json({
             ok: true,
-            eventSaved
+            event: eventSaved
         })
         
     } catch (error) {
@@ -47,14 +47,14 @@ const updateEvent = async (req = request, res = response) => {
         const event = await Event.findById( eventId );
 
         if ( !event ) {
-            res.status(404).json({
+            return res.status(404).json({
                 ok: false,
                 msg: 'Event not found'
             });
         };
 
         if ( event.user.toString() !== uid ) {
-            res.status(401).json({
+            return res.status(401).json({
                 ok: false,
                 msg: 'Not authorized'
             });
@@ -82,12 +82,43 @@ const updateEvent = async (req = request, res = response) => {
 
 };
 
-const deleteEvent = (req, res = response) => {
+const deleteEvent = async (req, res = response) => {
 
-    res.json({
-        ok: true,
-        msg: 'deleteEvent'
-    });
+    const eventId = req.params.id;
+    const uid = req.uid;
+
+    try {
+        
+        const event = await Event.findById( eventId );
+
+        if ( !event ) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Event not found'
+            });
+        };
+
+        if ( event.user.toString() !== uid ) {
+            return res.status(401).json({
+                ok: false,
+                msg: 'Not authorized'
+            });
+        };
+
+        const eventDeleted = await Event.findByIdAndRemove( eventId );
+
+        res.json({
+            ok: true,
+            event: eventDeleted
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error in delete event'
+        });
+    }
 
 };
 
